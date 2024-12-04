@@ -9,145 +9,102 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
         }
 
-        .banner {
-            text-align: center;
-            background: url('Portal_Event_Cover_page.png') no-repeat center center/cover;
-            height: 500px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        header {
+            background-image: url('Portal_Event_Cover_page.png');
+            background-size: cover;
+            background-position: center;
+            height: 300px; /* Adjust height to fit the banner */
+            position: relative;
         }
 
-        .content {
-            max-width: 1200px;
-            margin: 20px auto;
+        header h1 {
+            margin: 0;
             padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2 {
+            color: white;
+            font-size: 3rem;
             text-align: center;
-            color: #333;
+            position: absolute;
+            top: 50%; /* Centers text vertically */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Add shadow for visibility */
         }
 
-        .table-container {
+        main {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        h2 {
+            text-align: center;
             margin-top: 20px;
-            overflow-x: auto;
+            margin-bottom: 20px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 10px 0;
+            margin: 0 auto;
         }
 
-        table, th, td {
+        table th, table td {
             border: 1px solid #ddd;
-        }
-
-        th, td {
+            padding: 10px;
             text-align: left;
-            padding: 8px;
         }
 
-        th {
-            background-color: #0073e6;
+        table th {
+            background-color: #007bff;
             color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <div class="banner">
-        <!-- The banner image -->
-        <img src="Portal_Event_Cover_page.png" alt="Event Banner" style="width: 100%; height: auto;">
-    </div>
-    <div class="content">
+    <header>
         <h1>Grand Alumni Reunion 2024</h1>
+    </header>
+    <main>
         <h2>Attendee Details</h2>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Details</th>
-                        <th>Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Attendees</td>
-                        <td>138</td>
-                    </tr>
-                    <tr>
-                        <td>Spouses coming</td>
-                        <td>26</td>
-                    </tr>
-                    <tr>
-                        <td>Total Attendees</td>
-                        <td>164</td>
-                    </tr>
-                    <tr>
-                        <td>Joining for Dinner</td>
-                        <td>133</td>
-                    </tr>
-                    <tr>
-                        <td>Accompanied by Spouse (for dinner)</td>
-                        <td>24</td>
-                    </tr>
-                    <tr>
-                        <td>Total Dinner</td>
-                        <td>157</td>
-                    </tr>
-                    <tr>
-                        <td>Campus Tour</td>
-                        <td>110</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <h2>Graduation Year Distribution</h2>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Year of Graduation</th>
-                        <th>Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1999</td><td>5</td></tr>
-                    <tr><td>2002</td><td>3</td></tr>
-                    <tr><td>2004</td><td>1</td></tr>
-                    <tr><td>2006</td><td>1</td></tr>
-                    <tr><td>2009</td><td>1</td></tr>
-                    <tr><td>2011</td><td>1</td></tr>
-                    <tr><td>2013</td><td>12</td></tr>
-                    <tr><td>2015</td><td>4</td></tr>
-                    <tr><td>2017</td><td>7</td></tr>
-                    <tr><td>2019</td><td>10</td></tr>
-                    <tr><td>2021</td><td>6</td></tr>
-                    <tr><td>2023</td><td>31</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <footer>
-        <p>© 2024 Grand Alumni Reunion. All rights reserved.</p>
-    </footer>
+        <table>
+            <thead>
+                <tr>
+                    <th>Details</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Attendees</td>
+                    <td>138</td>
+                </tr>
+                <tr>
+                    <td>Spouses coming</td>
+                    <td>26</td>
+                </tr>
+                <tr>
+                    <td>Total Attendees</td>
+                    <td>164</td>
+                </tr>
+                <tr>
+                    <td>Joining for Dinner</td>
+                    <td>133</td>
+                </tr>
+                <tr>
+                    <td>Accompanied by Spouse (for dinner)</td>
+                    <td>24</td>
+                </tr>
+                <tr>
+                    <td>Total Dinner</td>
+                    <td>157</td>
+                </tr>
+                <tr>
+                    <td>Campus Tour</td>
+                    <td>110</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
 </body>
 </html>
