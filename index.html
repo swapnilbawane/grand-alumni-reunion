@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grand Alumni Reunion 2024</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -43,39 +45,16 @@
             margin-bottom: 20px;
         }
 
-        form {
-            max-width: 600px;
-            margin: 0 auto;
+        #upload-container {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        form label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        form input {
-            width: 100%;
+        #upload-container input {
             padding: 10px;
-            margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 4px;
-        }
-
-        form button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        form button:hover {
-            background-color: #0056b3;
+            margin: 5px;
         }
 
         table {
@@ -95,8 +74,8 @@
             color: white;
         }
 
-        #table-container {
-            display: none; /* Initially hide the table */
+        #attendee-table-container, #batch-table-container {
+            display: none; /* Initially hide the tables */
         }
     </style>
 </head>
@@ -105,33 +84,17 @@
         <h1>Grand Alumni Reunion 2024</h1>
     </header>
     <main>
-        <h2>Enter Attendee Details</h2>
-        <form id="dataForm">
-            <label for="attendees">Attendees:</label>
-            <input type="number" id="attendees" required>
+        <h2>Upload Data Files</h2>
+        <div id="upload-container">
+            <label for="attendeeFile">Upload Attendee Excel File:</label>
+            <input type="file" id="attendeeFile" accept=".xlsx, .xls"><br>
             
-            <label for="spouses">Spouses Coming:</label>
-            <input type="number" id="spouses" required>
-            
-            <label for="totalAttendees">Total Attendees:</label>
-            <input type="number" id="totalAttendees" required>
-            
-            <label for="dinner">Joining for Dinner:</label>
-            <input type="number" id="dinner" required>
-            
-            <label for="spousesDinner">Accompanied by Spouse (for dinner):</label>
-            <input type="number" id="spousesDinner" required>
-            
-            <label for="totalDinner">Total Dinner:</label>
-            <input type="number" id="totalDinner" required>
-            
-            <label for="campusTour">Campus Tour:</label>
-            <input type="number" id="campusTour" required>
-            
-            <button type="button" onclick="generateTable()">Submit</button>
-        </form>
+            <label for="batchFile">Upload Batch CSV File:</label>
+            <input type="file" id="batchFile" accept=".csv">
+        </div>
 
-        <div id="table-container">
+        <!-- Table for Attendee Details -->
+        <div id="attendee-table-container">
             <h2>Attendee Details</h2>
             <table>
                 <thead>
@@ -140,47 +103,101 @@
                         <th>Count</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody"></tbody>
+                <tbody id="attendeeTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Table for Batch Details -->
+        <div id="batch-table-container">
+            <h2>Batch Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Batch</th>
+                        <th>Number of Attendees</th>
+                    </tr>
+                </thead>
+                <tbody id="batchTableBody"></tbody>
             </table>
         </div>
     </main>
 
     <script>
-        function generateTable() {
-            // Get input values
-            const attendees = document.getElementById("attendees").value;
-            const spouses = document.getElementById("spouses").value;
-            const totalAttendees = document.getElementById("totalAttendees").value;
-            const dinner = document.getElementById("dinner").value;
-            const spousesDinner = document.getElementById("spousesDinner").value;
-            const totalDinner = document.getElementById("totalDinner").value;
-            const campusTour = document.getElementById("campusTour").value;
+        // Attendee Excel File Handling
+        document.getElementById('attendeeFile').addEventListener('change', handleAttendeeFile);
 
-            // Prepare table data
-            const data = [
-                { detail: "Attendees", count: attendees },
-                { detail: "Spouses coming", count: spouses },
-                { detail: "Total Attendees", count: totalAttendees },
-                { detail: "Joining for Dinner", count: dinner },
-                { detail: "Accompanied by Spouse (for dinner)", count: spousesDinner },
-                { detail: "Total Dinner", count: totalDinner },
-                { detail: "Campus Tour", count: campusTour },
-            ];
+        function handleAttendeeFile(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                alert("Please select an Excel file.");
+                return;
+            }
 
-            // Populate the table
-            const tableBody = document.getElementById("tableBody");
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                // Assume the first sheet is the one we need
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+
+                generateAttendeeTable(jsonData);
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        function generateAttendeeTable(data) {
+            const tableBody = document.getElementById("attendeeTableBody");
             tableBody.innerHTML = ""; // Clear existing rows
+
             data.forEach(item => {
                 const row = `<tr>
-                    <td>${item.detail}</td>
-                    <td>${item.count}</td>
+                    <td>${item['Details'] || 'N/A'}</td>
+                    <td>${item['Count'] || 'N/A'}</td>
                 </tr>`;
                 tableBody.innerHTML += row;
             });
 
-            // Show the table and hide the form
-            document.getElementById("dataForm").style.display = "none";
-            document.getElementById("table-container").style.display = "block";
+            // Show the table
+            document.getElementById("attendee-table-container").style.display = "block";
+        }
+
+        // Batch CSV File Handling
+        document.getElementById('batchFile').addEventListener('change', handleBatchFile);
+
+        function handleBatchFile(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                alert("Please select a CSV file.");
+                return;
+            }
+
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function (results) {
+                    generateBatchTable(results.data);
+                }
+            });
+        }
+
+        function generateBatchTable(data) {
+            const tableBody = document.getElementById("batchTableBody");
+            tableBody.innerHTML = ""; // Clear existing rows
+
+            data.forEach(item => {
+                const row = `<tr>
+                    <td>${item['Batch'] || 'N/A'}</td>
+                    <td>${item['Count'] || 'N/A'}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+
+            // Show the table
+            document.getElementById("batch-table-container").style.display = "block";
         }
     </script>
 </body>
